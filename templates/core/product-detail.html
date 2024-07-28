@@ -1,0 +1,168 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/default.min.css">
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+<script src="{% static 'assets/js/prism.js' %}"></script>
+<link rel="stylesheet" href="{% static 'assets/css/prism.css' %}">
+
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="{% url 'core:index' %}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                    <span></span> <a href="shop-grid-right.html">{{p.category}}</a> <span></span> {{p.title}}
+                </div>
+            </div>
+        </div>
+        <div class="container mb-30">
+            <div class="row">
+                <div class="col-xl-11 col-lg-12 m-auto">
+                    <div class="row">
+                        <div class="col-xl-9">
+                            <div class="product-detail accordion-detail">
+                                <div class="row mb-50 mt-30">
+                                    <div class="col-md-6 col-sm-12 col-xs-12 mb-md-0 mb-sm-5">
+                                        <div class="detail-gallery">
+                                            <!-- MAIN SLIDES -->
+                                            <div class="product-image-slider">
+                                                <figure class="border-radius-10">
+                                                    <img src="{{p.image.url}}" alt="product image" />
+                                                </figure>
+                                            </div>
+                                        </div>
+                                        <!-- End Gallery -->
+                                    </div>
+                                    <div class="col-md-6 col-sm-12 col-xs-12">
+                                        <div class="detail-info pr-30 pl-30">
+                                            <h2 class="title-detail">{{p.title}}</h2>
+                                            <div class="clearfix product-price-cover">
+                                                <div class="product-price primary-color float-left">
+                                                    <span  class="current-price text-brand">$</span><span  class="current-price text-brand"  id="current-product-price">{{p.price}}</span>
+                                                    <span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="short-desc mb-30">
+                                                <p class="font-lg">{{p.description|safe|truncatechars:150}}</p>
+                                            </div>
+                                            
+                                            <div class="detail-extralink mb-50">
+                                                <br>
+                                                <input type="number" value="1" name="" id="product-quantity" class="w-25 mb-10 product-quantity-{{ p.id }}">
+                                                <br>
+                                            <div class="product-extra-link2">
+                                                
+                                                    <input type="hidden" class="product-pid-{{ p.id }}" value="{{ p.pid }}">
+                                                    <input type="hidden" class="product-image-{{ p.id }}" value="{{ p.image.url }}">
+                                                    <input type="hidden" class="product-id-{{ p.id }}" value="{{ p.id }}">
+                                                    <input type="hidden" class="product-title-{{ p.id }}" value="{{ p.title }}">
+
+                                                
+                                                <button type="submit" class="button button-add-to-cart add-to-cart-btn" data-index="{{ p.id }}" id="add-to-cart-btn"><i class="fi-rs-shopping-cart"></i>Add to cart</button>
+                                                <a aria-label="Add To Wishlist" class="action-btn hover-up add-to-wishlist" data-product-item="{{p.id}}"><i class="fi-rs-heart"></i></a>
+                                            </div>
+                                        </div>
+                                            <div class="font-xs">
+                                                <ul class="float-start">
+                                                    <li class="mb-5">SKU: <a href="#">{{p.sku}}</a></li>
+                                                    {% if p.tags %}
+                                                    <li class="mb-5">Tags: {% for tag in p.tags.all %}<a href="{% url 'core:tags' tag.slug %}" rel="tag"> #{{tag.name}}</a>,{% endfor %} </li>
+                                                    {% endif %}
+                                                    <li>Stock:<span class="in-stock text-brand ml-5">{{p.stock_count}} Items In Stock</span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <!-- Detail Info -->
+                                    </div>
+                                </div>
+                                <div class="product-info">
+                                    <div class="tab-style3">
+                                        <ul class="nav nav-tabs text-uppercase">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="Description-tab" data-bs-toggle="tab" href="#Description">Description</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content shop_info_tab entry-main-content">
+                                            <div class="tab-pane fade show active" id="Description">
+                                                <div class="">
+                                                    <p>
+                                                        {{p.description|safe}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-60">
+                                    {% if products %}
+                                    <div class="col-12">
+                                        <h2 class="section-title style-1 mb-30">Related products</h2>
+                                    </div>
+                                    {% endif %}
+                                    <div class="col-12">
+                                        <div class="row related-products">
+                                            {% for p in products %}
+                                            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                                                <div class="product-cart-wrap mb-30">
+                                                    <div class="product-img-action-wrap">
+                                                        <div class="product-img product-img-zoom">
+                                                            <a href="{% url 'core:product-detail' p.pid %}">
+                                                                <img class="default-img" src="{{ p.image.url }}" alt="" style="height: 280px; width: 280px; object-fit: cover;"   />
+                                                                <img class="hover-img" src="{{ p.image.url }}" alt=""  style="height: 280px; width: 280px; object-fit: cover;"  />
+
+                                                            </a>
+                                                        </div>
+                                                        <div class="product-action-1">
+                                                            <a aria-label="Add To Wishlist"  class="action-btn add-to-wishlist" data-product-item="{{p.id}}"><i class="fi-rs-heart"></i></a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-content-wrap">
+                                                        <div class="product-category">
+                                                            <a href="{% url 'core:product-detail' p.pid %}">{{ p.category.title }}</a>
+                                                        </div>
+                                                        <h2><a href="{% url 'core:product-detail' p.pid %}">{{ p.title }}</a></h2>
+                                                        <div class="product-rate-cover">
+                                                            <i class="fas fa-star text-warning"></i>
+                                                            <span class="font-small ml-5 text-muted"> ({{ p.reviews.all.count }})</span>
+
+                                                        </div>
+                                                        <div class="product-card-bottom">
+                                                            <div class="product-price">
+                                                                <span>$</span> <span>{{p.price}}</span>
+                                                            </div>
+                                                            <div class="add-cart">
+                                                                <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ p.id }}">
+                                                                <input type="hidden" class="product-pid-{{ p.id }}" value="{{ p.pid }}">
+                                                                <input type="hidden" class="product-image-{{ p.id }}" value="{{ p.image.url }}">
+                                                                <input type="hidden" class="product-id-{{ p.id }}" value="{{ p.id }}">
+                                                                <input type="hidden" class="product-title-{{ p.id }}" value="{{ p.title }}">
+                                                                <div class="d-flex">
+                                                                    <button class="add add-to-cart-btn" data-index="{{ p.id }}" style="border: none;" id="add-to-cart-btn"><i class="fi-rs-shopping-cart mr-5"></i>Add</button>
+                                                                    <button style="border: none; background: none;" class="add-to-wishlist" data-product-item="{{p.id}}"><i class="fi-rs-heart" style="fill: aqua;"></i></button>
+                                                                </div>
+                                                                <!-- <button class="add add-to-cart-btn" data-index="{{ p.id }}" style="border: none;" id="add-to-cart-btn"><i class="fi-rs-shopping-cart mr-5"></i>Add</button> -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                <ul>
+                                    <li class="hr"><span></span></li>
+                                </ul>
+                            </div>                     
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock content %}
